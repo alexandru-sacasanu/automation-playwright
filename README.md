@@ -8,6 +8,7 @@ A Playwright + pytest test suite for [saucedemo.com](https://www.saucedemo.com),
 - **pytest-playwright** — browser fixtures, `--headed`/`--slowmo` support
 - **Page Object Model** — page classes in `pages/` encapsulate locators/actions
 - **pytest-html** — self-contained HTML report of the run
+- **pytest-bdd** — Cucumber-style Gherkin `.feature` files with Python step definitions
 - **GitHub Actions** — runs the suite on push and on a daily schedule
 - **Netlify** — hosts the published report
 
@@ -37,6 +38,9 @@ pytest -m regression            # broader coverage
 
 # watch it run in a real browser
 pytest --headed --slowmo 500
+
+# run only the Cucumber/Gherkin scenarios
+pytest features/
 ```
 
 ## Configuration
@@ -72,6 +76,14 @@ tests/
   test_login.py
   test_cart.py
   test_checkout.py
+features/                 # Cucumber-style Gherkin scenarios (pytest-bdd)
+  login.feature
+  cart.feature
+  checkout.feature
+  steps/
+    test_login_steps.py
+    test_cart_steps.py
+    test_checkout_steps.py
 pytest.ini                # pytest config, markers, default report output path
 reports/
   pytest_report.html        # generated test report (published to Netlify)
