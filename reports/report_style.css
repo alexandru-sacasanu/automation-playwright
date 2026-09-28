@@ -1,0 +1,57 @@
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background: #0f1117;
+  color: #e6e8ee;
+}
+
+#environment td, #environment th { color: #e6e8ee; }
+
+h1#title {
+  color: #e6e8ee;
+  font-weight: 700;
+}
+
+h2 { color: #e6e8ee; }
+
+#environment { background: #171a23; border: 1px solid #262b38; }
+
+.summary__data { color: #e6e8ee; }
+
+#results-table {
+  background: #171a23;
+  border: 1px solid #262b38;
+}
+
+#results-table th {
+  background: #1c2029;
+  color: #8b93a7;
+  text-transform: uppercase;
+  font-size: 12px;
+  letter-spacing: 0.04em;
+}
+
+#results-table td {
+  border-color: #262b38;
+  color: #e6e8ee;
+}
+
+tr.passed td.col-result { color: #3ddc84; font-weight: 600; }
+tr.failed td.col-result { color: #ff5c6c; font-weight: 600; }
+tr.skipped td.col-result { color: #f5c451; font-weight: 600; }
+
+.passed { background-color: rgba(61, 220, 132, 0.08) !important; }
+.failed { background-color: rgba(255, 92, 108, 0.08) !important; }
+.skipped { background-color: rgba(245, 196, 81, 0.08) !important; }
+
+.log {
+  background: #0b0d12;
+  color: #d7dae2;
+  border: 1px solid #262b38;
+  border-radius: 6px;
+}
+
+.image { border-radius: 8px; border: 1px solid #262b38; margin-top: 8px; }
+
+#logo { display: none; }
+
+.controls a { color: #5b8cff; }

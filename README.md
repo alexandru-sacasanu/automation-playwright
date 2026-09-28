@@ -8,7 +8,7 @@ A Playwright + pytest test suite for [saucedemo.com](https://www.saucedemo.com),
 - **pytest-playwright** — browser fixtures, `--headed`/`--slowmo` support
 - **Views** (`views/`) — one class per page, encapsulates locators/actions (Page Object Model)
 - **Flows** (`flows/`) — chains multiple views into a full user journey (e.g. login → add to cart → checkout); tests call one flow method and assert
-- **pytest-html** — self-contained HTML report of the run
+- **pytest-html** — self-contained HTML report of the run, dark theme, embedded screenshots on failure
 - **pytest-bdd** — Cucumber-style Gherkin `.feature` files with Python step definitions
 - **GitHub Actions** — runs the suite on push and on a daily schedule
 - **Netlify** — hosts the published report
@@ -72,7 +72,15 @@ Defined in [pytest.ini](pytest.ini):
 - `smoke` — critical-path tests, safe to run on every push
 - `regression` — broader coverage, run on a schedule or before release
 
-Open `reports/pytest_report.html` in a browser to view the report.
+Open `reports/pytest_report.html` in a browser to view the report. Styled via [reports/report_style.css](reports/report_style.css); failed tests embed a screenshot taken at the moment of failure.
+
+## Seeing a failing run
+
+`tests/test_negative_examples.py` contains intentionally wrong tests (made-up username, nonexistent product, wrong expected values) so you can see what a red report looks like:
+
+```bash
+pytest tests/test_negative_examples.py -v
+```
 
 ## Project structure
 
@@ -93,6 +101,7 @@ tests/
   test_login.py
   test_cart.py
   test_checkout.py
+  test_negative_examples.py  # intentionally failing tests, for demoing a red report
 features/                 # Cucumber-style Gherkin scenarios (pytest-bdd)
   login.feature
   cart.feature
@@ -104,4 +113,5 @@ features/                 # Cucumber-style Gherkin scenarios (pytest-bdd)
 pytest.ini                # pytest config, markers, default report output path
 reports/
   pytest_report.html        # generated test report (published to Netlify)
+  report_style.css           # dark theme for the report
 ```

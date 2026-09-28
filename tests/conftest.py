@@ -1,7 +1,9 @@
+import base64
 import sys
 from pathlib import Path
 
 import pytest
+import pytest_html
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
@@ -45,3 +47,28 @@ def shopping_flow(inventory_view, page):
 @pytest.fixture
 def checkout_flow(page):
     return CheckoutFlow(page)
+
+
+def pytest_html_report_title(report):
+    report.title = "Automation Suite — SauceDemo"
+
+
+@pytest.hookimpl(hookwrapper=True)
+def pytest_runtest_makereport(item, call):
+    outcome = yield
+    report = outcome.get_result()
+
+    if report.when != "call":
+        return
+
+    page = item.funcargs.get("page")
+    extras = getattr(report, "extras", [])
+
+    if report.failed and page is not None:
+        try:
+            screenshot_b64 = base64.b64encode(page.screenshot()).decode("utf-8")
+            extras.append(pytest_html.extras.image(screenshot_b64, mime_type="image/png"))
+        except Exception:
+            pass
+
+    report.extras = extras
