@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Automation Run Report</title>
+<style>
+  :root {
+    --bg: #0f1117;
+    --panel: #171a23;
+    --border: #262b38;
+    --text: #e6e8ee;
+    --muted: #8b93a7;
+    --accent: #5b8cff;
+    --pass: #3ddc84;
+    --fail: #ff5c6c;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    background: var(--bg);
+    color: var(--text);
+  }
+  header {
+    padding: 32px 24px;
+    border-bottom: 1px solid var(--border);
+  }
+  header h1 { margin: 0 0 8px; font-size: 22px; }
+  header p { margin: 0; color: var(--muted); font-size: 14px; }
+  .badge {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+  .badge.passed { background: rgba(61,220,132,0.15); color: var(--pass); }
+  .badge.failed { background: rgba(255,92,108,0.15); color: var(--fail); }
+  main {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 24px;
+  }
+  .step {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 16px;
+  }
+  .step-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 6px;
+  }
+  .step-name { font-size: 16px; font-weight: 600; }
+  .step-detail { color: var(--muted); font-size: 14px; margin: 4px 0 12px; }
+  .step-time { color: var(--muted); font-size: 12px; }
+  .step img {
+    width: 100%;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    display: block;
+  }
+  footer {
+    text-align: center;
+    color: var(--muted);
+    font-size: 12px;
+    padding: 24px;
+  }
+</style>
+</head>
+<body>
+<header>
+  <h1>Web Automation Demo — Run Report</h1>
+  <p>
+    Target: {{ run.target }} &middot;
+    Started: {{ run.run_started }} &middot;
+    <span class="badge {{ run.status }}">{{ run.status }}</span>
+  </p>
+</header>
+<main>
+  {% for step in run.steps %}
+  <div class="step">
+    <div class="step-head">
+      <span class="step-name">{{ loop.index }}. {{ step.name }}</span>
+      <span class="badge {{ step.status }}">{{ step.status }}</span>
+    </div>
+    <p class="step-detail">{{ step.detail }}</p>
+    <p class="step-time">{{ step.timestamp }}</p>
+    {% if step.screenshot %}
+    <img src="{{ step.screenshot }}" alt="{{ step.name }} screenshot">
+    {% endif %}
+  </div>
+  {% endfor %}
+</main>
+<footer>
+  Generated automatically by a Playwright automation run &middot; Python + Playwright
+</footer>
+</body>
+</html>

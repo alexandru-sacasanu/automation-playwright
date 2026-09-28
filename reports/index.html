@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Automation Run Report</title>
+<style>
+  :root {
+    --bg: #0f1117;
+    --panel: #171a23;
+    --border: #262b38;
+    --text: #e6e8ee;
+    --muted: #8b93a7;
+    --accent: #5b8cff;
+    --pass: #3ddc84;
+    --fail: #ff5c6c;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    background: var(--bg);
+    color: var(--text);
+  }
+  header {
+    padding: 32px 24px;
+    border-bottom: 1px solid var(--border);
+  }
+  header h1 { margin: 0 0 8px; font-size: 22px; }
+  header p { margin: 0; color: var(--muted); font-size: 14px; }
+  .badge {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+  .badge.passed { background: rgba(61,220,132,0.15); color: var(--pass); }
+  .badge.failed { background: rgba(255,92,108,0.15); color: var(--fail); }
+  main {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 24px;
+  }
+  .step {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 16px;
+  }
+  .step-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 6px;
+  }
+  .step-name { font-size: 16px; font-weight: 600; }
+  .step-detail { color: var(--muted); font-size: 14px; margin: 4px 0 12px; }
+  .step-time { color: var(--muted); font-size: 12px; }
+  .step img {
+    width: 100%;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    display: block;
+  }
+  footer {
+    text-align: center;
+    color: var(--muted);
+    font-size: 12px;
+    padding: 24px;
+  }
+</style>
+</head>
+<body>
+<header>
+  <h1>Web Automation Demo — Run Report</h1>
+  <p>
+    Target: https://www.saucedemo.com &middot;
+    Started: 2026-09-28T20:28:07.908308+00:00 &middot;
+    <span class="badge passed">passed</span>
+  </p>
+</header>
+<main>
+  
+  <div class="step">
+    <div class="step-head">
+      <span class="step-name">1. Load login page</span>
+      <span class="badge passed">passed</span>
+    </div>
+    <p class="step-detail">Navigated to https://www.saucedemo.com</p>
+    <p class="step-time">2026-09-28T20:28:12.059584+00:00</p>
+    
+    <img src="screenshots/00_load_login_page.png" alt="Load login page screenshot">
+    
+  </div>
+  
+  <div class="step">
+    <div class="step-head">
+      <span class="step-name">2. Log in</span>
+      <span class="badge passed">passed</span>
+    </div>
+    <p class="step-detail">Logged in as standard_user</p>
+    <p class="step-time">2026-09-28T20:28:12.339645+00:00</p>
+    
+    <img src="screenshots/01_log_in.png" alt="Log in screenshot">
+    
+  </div>
+  
+  <div class="step">
+    <div class="step-head">
+      <span class="step-name">3. Add items to cart</span>
+      <span class="badge passed">passed</span>
+    </div>
+    <p class="step-detail">Added: Sauce Labs Backpack, Sauce Labs Bike Light</p>
+    <p class="step-time">2026-09-28T20:28:12.460692+00:00</p>
+    
+    <img src="screenshots/02_add_items_to_cart.png" alt="Add items to cart screenshot">
+    
+  </div>
+  
+  <div class="step">
+    <div class="step-head">
+      <span class="step-name">4. Open cart</span>
+      <span class="badge passed">passed</span>
+    </div>
+    <p class="step-detail">2 item(s) in cart</p>
+    <p class="step-time">2026-09-28T20:28:12.544668+00:00</p>
+    
+    <img src="screenshots/03_open_cart.png" alt="Open cart screenshot">
+    
+  </div>
+  
+  <div class="step">
+    <div class="step-head">
+      <span class="step-name">5. Fill checkout info</span>
+      <span class="badge passed">passed</span>
+    </div>
+    <p class="step-detail">Continued to overview</p>
+    <p class="step-time">2026-09-28T20:28:12.678758+00:00</p>
+    
+    <img src="screenshots/04_fill_checkout_info.png" alt="Fill checkout info screenshot">
+    
+  </div>
+  
+  <div class="step">
+    <div class="step-head">
+      <span class="step-name">6. Review order summary</span>
+      <span class="badge passed">passed</span>
+    </div>
+    <p class="step-detail">Total: $43.18</p>
+    <p class="step-time">2026-09-28T20:28:12.710616+00:00</p>
+    
+    <img src="screenshots/05_review_order_summary.png" alt="Review order summary screenshot">
+    
+  </div>
+  
+  <div class="step">
+    <div class="step-head">
+      <span class="step-name">7. Complete checkout</span>
+      <span class="badge passed">passed</span>
+    </div>
+    <p class="step-detail">Thank you for your order!</p>
+    <p class="step-time">2026-09-28T20:28:12.776849+00:00</p>
+    
+    <img src="screenshots/06_complete_checkout.png" alt="Complete checkout screenshot">
+    
+  </div>
+  
+</main>
+<footer>
+  Generated automatically by a Playwright automation run &middot; Python + Playwright
+</footer>
+</body>
+</html>
