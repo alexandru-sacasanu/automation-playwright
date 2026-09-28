@@ -1,6 +1,12 @@
-class LoginPage:
-    URL = "https://www.saucedemo.com"
+import sys
+from pathlib import Path
 
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+
+from config import Config
+
+
+class LoginPage:
     def __init__(self, page):
         self.page = page
         self.username_input = page.locator("#user-name")
@@ -9,7 +15,7 @@ class LoginPage:
         self.error_message = page.locator("[data-test='error']")
 
     def goto(self):
-        self.page.goto(self.URL)
+        self.page.goto(Config.BASE_URL)
         return self
 
     def login(self, username, password):
