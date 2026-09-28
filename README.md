@@ -8,8 +8,10 @@ A Playwright + pytest test suite for [saucedemo.com](https://www.saucedemo.com),
 - **pytest-playwright** — browser fixtures, `--headed`/`--slowmo` support
 - **Views** (`views/`) — one class per page, encapsulates locators/actions (Page Object Model)
 - **Flows** (`flows/`) — chains multiple views into a full user journey (e.g. login → add to cart → checkout); tests call one flow method and assert
-- **pytest-html** — self-contained HTML report of the run, dark theme, embedded screenshots on failure
+- **pytest-html** — self-contained HTML report of the run, light theme, embedded screenshots + Playwright traces on failure
 - **pytest-bdd** — Cucumber-style Gherkin `.feature` files with Python step definitions
+- **pytest-xdist** — parallel test execution across CPU cores
+- **Playwright tracing** — full trace (DOM snapshots, network, console) captured for any failing test, viewable in the trace viewer
 - **GitHub Actions** — runs the suite on push and on a daily schedule
 - **Netlify** — hosts the published report
 
@@ -42,6 +44,9 @@ pytest --headed --slowmo 500
 
 # run only the Cucumber/Gherkin scenarios
 pytest features/
+
+# run in parallel across all CPU cores
+pytest -n auto
 ```
 
 ## Configuration
@@ -72,7 +77,15 @@ Defined in [pytest.ini](pytest.ini):
 - `smoke` — critical-path tests, safe to run on every push
 - `regression` — broader coverage, run on a schedule or before release
 
-Open `reports/pytest_report.html` in a browser to view the report. Styled via [reports/report_style.css](reports/report_style.css); failed tests embed a screenshot taken at the moment of failure.
+Open `reports/pytest_report.html` in a browser to view the report. Styled via [reports/report_style.css](reports/report_style.css); failed tests embed a screenshot and a link to a full Playwright trace.
+
+## Debugging a failure with the trace viewer
+
+Every failed test captures a Playwright trace (DOM snapshots, network requests, console logs, timeline) under `reports/traces/<test-name>/trace.zip`. Click "Playwright trace" on a failed row in the report, or open it directly:
+
+```bash
+playwright show-trace reports/traces/<test-name>/trace.zip
+```
 
 ## Seeing a failing run
 
@@ -113,5 +126,6 @@ features/                 # Cucumber-style Gherkin scenarios (pytest-bdd)
 pytest.ini                # pytest config, markers, default report output path
 reports/
   pytest_report.html        # generated test report (published to Netlify)
-  report_style.css           # dark theme for the report
+  report_style.css           # theme for the report
+  traces/                     # Playwright traces for failed tests (generated, gitignored)
 ```

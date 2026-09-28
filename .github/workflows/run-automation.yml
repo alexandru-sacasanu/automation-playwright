@@ -23,7 +23,7 @@ jobs:
           playwright install --with-deps chromium
 
       - name: Run test suite
-        run: pytest -v
+        run: pytest -v -n auto
 
       - name: Commit updated report
         if: always()

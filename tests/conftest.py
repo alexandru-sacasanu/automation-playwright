@@ -1,4 +1,5 @@
 import base64
+import re
 import sys
 from pathlib import Path
 
@@ -70,5 +71,12 @@ def pytest_runtest_makereport(item, call):
             extras.append(pytest_html.extras.image(screenshot_b64, mime_type="image/png"))
         except Exception:
             pass
+
+        # pytest-playwright writes the trace zip during fixture teardown, which
+        # runs after this hook, so the file won't exist yet — link it anyway,
+        # it'll be there by the time the report is opened.
+        trace_dir_name = re.sub(r"[^A-Za-z0-9]+", "-", item.nodeid).strip("-").lower()
+        trace_path = Path("traces") / trace_dir_name / "trace.zip"
+        extras.append(pytest_html.extras.url(str(trace_path), name="Playwright trace"))
 
     report.extras = extras
