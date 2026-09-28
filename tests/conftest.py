@@ -6,40 +6,42 @@ import pytest
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 from config import Config
-from pages.login_page import LoginPage
-from pages.inventory_page import InventoryPage
-from pages.cart_page import CartPage
-from pages.checkout_page import CheckoutPage
+from flows.auth_flow import AuthFlow
+from flows.shopping_flow import ShoppingFlow
+from flows.checkout_flow import CheckoutFlow
+from views.login_view import LoginView
 
 STANDARD_USER = Config.STANDARD_USER
 LOCKED_USER = Config.LOCKED_USER
 PASSWORD = Config.PASSWORD
 
 
-@pytest.fixture
-def login_page(page):
+@pytest.fixture(autouse=True)
+def _set_default_timeout(page):
     page.set_default_timeout(Config.DEFAULT_TIMEOUT_MS)
-    return LoginPage(page).goto()
 
 
 @pytest.fixture
-def logged_in_page(page):
-    """Returns an InventoryPage after logging in as the standard user."""
-    page.set_default_timeout(Config.DEFAULT_TIMEOUT_MS)
-    LoginPage(page).goto().login(STANDARD_USER, PASSWORD)
-    return InventoryPage(page).is_loaded()
+def login_view(page):
+    return LoginView(page).goto()
 
 
 @pytest.fixture
-def inventory_page(logged_in_page):
-    return logged_in_page
+def auth_flow(page):
+    return AuthFlow(page)
 
 
 @pytest.fixture
-def cart_page(page):
-    return CartPage(page)
+def inventory_view(page):
+    """Logged-in inventory view, ready for shopping."""
+    return AuthFlow(page).login_as_standard_user()
 
 
 @pytest.fixture
-def checkout_page(page):
-    return CheckoutPage(page)
+def shopping_flow(inventory_view, page):
+    return ShoppingFlow(page)
+
+
+@pytest.fixture
+def checkout_flow(page):
+    return CheckoutFlow(page)

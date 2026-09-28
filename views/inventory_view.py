@@ -1,4 +1,4 @@
-class InventoryPage:
+class InventoryView:
     def __init__(self, page):
         self.page = page
         self.inventory_list = page.locator(".inventory_list")

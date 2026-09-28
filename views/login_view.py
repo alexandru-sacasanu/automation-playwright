@@ -6,7 +6,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 from config import Config
 
 
-class LoginPage:
+class LoginView:
     def __init__(self, page):
         self.page = page
         self.username_input = page.locator("#user-name")

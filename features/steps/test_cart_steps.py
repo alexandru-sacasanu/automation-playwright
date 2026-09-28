@@ -5,29 +5,28 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent))
 
 from pytest_bdd import scenarios, given, when, then, parsers
 
-from config import Config
-from pages.login_page import LoginPage
-from pages.inventory_page import InventoryPage
+from flows.auth_flow import AuthFlow
+from flows.shopping_flow import ShoppingFlow
 
 scenarios("../cart.feature")
 
 
-@given("I am logged in as the standard user", target_fixture="inventory_page")
+@given("I am logged in as the standard user", target_fixture="shopping_flow")
 def logged_in_as_standard_user(page):
-    LoginPage(page).goto().login(Config.STANDARD_USER, Config.PASSWORD)
-    return InventoryPage(page).is_loaded()
+    AuthFlow(page).login_as_standard_user()
+    return ShoppingFlow(page)
 
 
 @when(parsers.parse('I add "{product}" to the cart'))
-def add_to_cart(inventory_page, product):
-    inventory_page.add_to_cart(product)
+def add_to_cart(shopping_flow, product):
+    shopping_flow.add_items(product)
 
 
 @when(parsers.parse('I remove "{product}" from the cart'))
-def remove_from_cart(inventory_page, product):
-    inventory_page.remove_from_cart(product)
+def remove_from_cart(shopping_flow, product):
+    shopping_flow.remove_item(product)
 
 
 @then(parsers.parse('the cart badge should show "{count}"'))
-def cart_badge_shows(inventory_page, count):
-    assert inventory_page.cart_count() == int(count)
+def cart_badge_shows(shopping_flow, count):
+    assert shopping_flow.cart_count() == int(count)

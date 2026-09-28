@@ -1,12 +1,13 @@
 # Web Automation Test Suite
 
-A Playwright + pytest test suite for [saucedemo.com](https://www.saucedemo.com), using the Page Object Model. Covers login, cart, and checkout flows, and publishes an HTML report via pytest-html.
+A Playwright + pytest test suite for [saucedemo.com](https://www.saucedemo.com), using Views (Page Object Model) and Flows (chained multi-view journeys). Covers login, cart, and checkout, and publishes an HTML report via pytest-html.
 
 ## Stack
 
 - **Python + Playwright + pytest** — test framework
 - **pytest-playwright** — browser fixtures, `--headed`/`--slowmo` support
-- **Page Object Model** — page classes in `pages/` encapsulate locators/actions
+- **Views** (`views/`) — one class per page, encapsulates locators/actions (Page Object Model)
+- **Flows** (`flows/`) — chains multiple views into a full user journey (e.g. login → add to cart → checkout); tests call one flow method and assert
 - **pytest-html** — self-contained HTML report of the run
 - **pytest-bdd** — Cucumber-style Gherkin `.feature` files with Python step definitions
 - **GitHub Actions** — runs the suite on push and on a daily schedule
@@ -51,6 +52,18 @@ Test settings (base URL, credentials, timeouts) live in [config.py](config.py) a
 BASE_URL=https://www.saucedemo.com STANDARD_USER=standard_user pytest
 ```
 
+## Views and Flows
+
+- A **view** wraps one page's locators and actions (e.g. `CheckoutView.fill_info(...)`).
+- A **flow** chains several views into one journey a test can call in a single line, e.g.:
+
+```python
+checkout_view = checkout_flow.buy_items("Sauce Labs Backpack", "Sauce Labs Bike Light")
+assert "Total" in checkout_view.total_text()
+```
+
+`CheckoutFlow.buy_items` internally logs in (`AuthFlow`), adds items and opens the cart (`ShoppingFlow`), starts checkout, and fills the checkout form — the test only calls the flow and asserts on the result.
+
 ## Suites (markers)
 
 Defined in [pytest.ini](pytest.ini):
@@ -65,14 +78,18 @@ Open `reports/pytest_report.html` in a browser to view the report.
 
 ```
 config.py                # test settings (base URL, credentials, timeouts)
-pages/                  # Page Object Model
-  login_page.py
-  inventory_page.py
-  cart_page.py
-  checkout_page.py
+views/                  # Page Object Model — one class per page
+  login_view.py
+  inventory_view.py
+  cart_view.py
+  checkout_view.py
+flows/                   # chains views into full user journeys
+  auth_flow.py            # login
+  shopping_flow.py        # add/remove cart items
+  checkout_flow.py        # login -> cart -> checkout, end to end
 tests/
-  conftest.py            # shared fixtures (login, page objects)
-  base_test.py           # BaseTest class, shared setup for test classes
+  conftest.py            # shared fixtures (exposes flows to tests)
+  base_test.py           # BaseTest class, flow access for test classes
   test_login.py
   test_cart.py
   test_checkout.py

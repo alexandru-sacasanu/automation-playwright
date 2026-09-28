@@ -1,4 +1,4 @@
-class CheckoutPage:
+class CheckoutView:
     def __init__(self, page):
         self.page = page
         self.first_name_input = page.locator("#first-name")

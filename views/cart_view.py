@@ -1,4 +1,4 @@
-class CartPage:
+class CartView:
     def __init__(self, page):
         self.page = page
         self.cart_items = page.locator(".cart_item")
