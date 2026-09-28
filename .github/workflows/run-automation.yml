@@ -10,6 +10,10 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        browser: [chromium, firefox, webkit]
     steps:
       - uses: actions/checkout@v4
 
@@ -20,13 +24,35 @@ jobs:
       - name: Install dependencies
         run: |
           pip install -r requirements.txt
-          playwright install --with-deps chromium
+          playwright install --with-deps ${{ matrix.browser }}
 
       - name: Run test suite
-        run: pytest -v -n auto
+        run: pytest -v -n auto --browser ${{ matrix.browser }} --html=reports/pytest_report_${{ matrix.browser }}.html
+
+      - name: Upload report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: pytest-report-${{ matrix.browser }}
+          path: reports/pytest_report_${{ matrix.browser }}.html
+
+  publish:
+    needs: test
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download chromium report
+        uses: actions/download-artifact@v4
+        with:
+          name: pytest-report-chromium
+          path: reports
+
+      - name: Publish primary report
+        run: cp reports/pytest_report_chromium.html reports/pytest_report.html
 
       - name: Commit updated report
-        if: always()
         run: |
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"

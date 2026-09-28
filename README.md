@@ -12,7 +12,8 @@ A Playwright + pytest test suite for [saucedemo.com](https://www.saucedemo.com),
 - **pytest-bdd** — Cucumber-style Gherkin `.feature` files with Python step definitions
 - **pytest-xdist** — parallel test execution across CPU cores
 - **Playwright tracing** — full trace (DOM snapshots, network, console) captured for any failing test, viewable in the trace viewer
-- **GitHub Actions** — runs the suite on push and on a daily schedule
+- **Cross-browser** — same suite runs unmodified against Chromium, Firefox, and WebKit
+- **GitHub Actions** — runs the suite on push and on a daily schedule, as a browser matrix (chromium/firefox/webkit in parallel jobs)
 - **Netlify** — hosts the published report
 
 ## Setup
@@ -21,7 +22,7 @@ A Playwright + pytest test suite for [saucedemo.com](https://www.saucedemo.com),
 python3.12 -m venv venv
 source venv/bin/activate
 pip install -r requirements.txt
-playwright install chromium
+playwright install chromium firefox webkit
 ```
 
 ## Run the tests
@@ -47,6 +48,13 @@ pytest features/
 
 # run in parallel across all CPU cores
 pytest -n auto
+
+# run against a specific browser
+pytest --browser firefox
+pytest --browser webkit
+
+# run against multiple browsers in one go
+pytest --browser chromium --browser firefox --browser webkit
 ```
 
 ## Configuration
