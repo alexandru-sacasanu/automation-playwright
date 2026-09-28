@@ -1,12 +1,14 @@
-name: Run automation and publish report
+name: Run test suite and publish report
 
 on:
   schedule:
     - cron: "0 8 * * *"
   workflow_dispatch: {}
+  push:
+    branches: [main]
 
 jobs:
-  run:
+  test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -20,16 +22,14 @@ jobs:
           pip install -r requirements.txt
           playwright install --with-deps chromium
 
-      - name: Run automation
-        run: python scripts/run_automation.py
-
-      - name: Build report
-        run: python scripts/build_report.py
+      - name: Run test suite
+        run: pytest -v
 
       - name: Commit updated report
+        if: always()
         run: |
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
-          git add reports/
-          git diff --cached --quiet || git commit -m "chore: update automation run report"
+          git add reports/pytest_report.html
+          git diff --cached --quiet || git commit -m "chore: update test report"
           git push
